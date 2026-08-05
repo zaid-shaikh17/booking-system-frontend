@@ -1,22 +1,85 @@
-.slot-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-  gap: 8px;
+.board {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: var(--ink);
+  padding: 16px;
+  border-radius: var(--radius);
 }
-.slot {
-  padding: 12px 8px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  cursor: pointer;
+
+.slat {
+  position: relative;
+  min-width: 108px;
+  background: var(--panel);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: var(--shadow-panel);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.slot-open {
-  background: #e8f5e9;
+
+.slat[data-status='open']    { border-top: 3px solid var(--open); }
+.slat[data-status='yours']   { border-top: 3px solid var(--yours); }
+.slat[data-status='booked']  { border-top: 3px solid var(--taken); }
+.slat[data-status='waitlisted'] { border-top: 3px solid var(--wait); }
+
+.slat-btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 12px 14px;
+  background: transparent;
 }
-.slot-booked {
-  background: #ffebee;
-  cursor: not-allowed;
-  opacity: 0.6;
+
+.slat-time {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: 0.02em;
 }
-.slot-yours {
-  background: #e3f2fd;
+
+.slat-status {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.slat[data-status='open']    .slat-status { color: var(--open); }
+.slat[data-status='yours']   .slat-status { color: var(--yours); }
+.slat[data-status='booked']  .slat-status { color: var(--taken); }
+.slat[data-status='waitlisted'] .slat-status { color: var(--wait); }
+
+.slat-btn:disabled { cursor: not-allowed; }
+
+.slat[data-status='open']:hover {
+  transform: translateY(-2px);
+}
+
+.slat-cancel {
+  width: 100%;
+  padding: 6px 14px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--taken);
+  background: var(--taken-bg);
+  text-align: left;
+}
+
+.slat-cancel:hover {
+  background: var(--taken);
+  color: var(--panel);
+}
+
+/* Flip-transition when a slat's status changes */
+@keyframes flip-in {
+  0%   { transform: rotateX(90deg); opacity: 0; }
+  100% { transform: rotateX(0deg); opacity: 1; }
+}
+
+.slat[data-just-changed='true'] {
+  animation: flip-in 0.4s ease-out;
+  transform-origin: top;
 }

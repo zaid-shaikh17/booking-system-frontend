@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef, useEffect, useState } from 'react';
 import './SlotGrid.css';
 
 function generateSlots(date, startHour = 9, endHour = 18) {
@@ -13,33 +13,64 @@ function generateSlots(date, startHour = 9, endHour = 18) {
   return slots;
 }
 
+function formatHour(date) {
+  return date.toLocaleTimeString([], { hour: 'numeric' }).replace(' ', '');
+}
+
 export default function SlotGrid({ date, bookings, currentUserId, onSelectSlot, onCancel }) {
   const slots = useMemo(() => generateSlots(date), [date]);
+  const prevStatuses = useRef({});
+  const [changedKeys, setChangedKeys] = useState({});
 
   function getSlotInfo(slot) {
-    const match = bookings.find(b =>
-      new Date(b.startTime).getTime() === slot.start.getTime()
+    const match = bookings.find(
+      (b) => new Date(b.startTime).getTime() === slot.start.getTime()
     );
     if (!match) return { status: 'open' };
-    if (String(match.userId) === String(currentUserId)) return { status: 'yours', bookingId: match._id };
+    if (String(match.userId) === String(currentUserId)) {
+      return { status: 'yours', bookingId: match._id };
+    }
     return { status: 'booked' };
   }
 
+  useEffect(() => {
+    const changed = {};
+    slots.forEach((slot) => {
+      const key = slot.start.toISOString();
+      const { status } = getSlotInfo(slot);
+      if (prevStatuses.current[key] && prevStatuses.current[key] !== status) {
+        changed[key] = true;
+      }
+      prevStatuses.current[key] = status;
+    });
+    setChangedKeys(changed);
+    const timeout = setTimeout(() => setChangedKeys({}), 450);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bookings]);
+
   return (
-    <div className="slot-grid">
+    <div className="board">
       {slots.map((slot) => {
+        const key = slot.start.toISOString();
         const { status, bookingId } = getSlotInfo(slot);
         return (
-          <div key={slot.start.toISOString()} className={`slot slot-${status}`}>
+          <div
+            key={key}
+            className="slat"
+            data-status={status}
+            data-just-changed={changedKeys[key] ? 'true' : 'false'}
+          >
             <button
-              disabled={status === 'booked'}
+              className="slat-btn"
+              disabled={status !== 'open'}
               onClick={() => status === 'open' && onSelectSlot(slot)}
             >
-              {slot.start.toLocaleTimeString([], { hour: 'numeric' })}
-              <span className="slot-status">{status}</span>
+              <span className="slat-time">{formatHour(slot.start)}</span>
+              <span className="slat-status">{status}</span>
             </button>
             {status === 'yours' && (
-              <button className="cancel-btn" onClick={() => onCancel(bookingId)}>
+              <button className="slat-cancel" onClick={() => onCancel(bookingId)}>
                 Cancel
               </button>
             )}

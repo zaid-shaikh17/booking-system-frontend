@@ -1,9 +1,10 @@
 // pages/BookingPage.jsx
 import { useState, useEffect } from "react";
-import api from "../services/api";
-import SlotGrid from "../components/Calendar/SlotGrid";
-import { useAuth } from "../context/AuthContext";
+import api from "../../services/api";
+import SlotGrid from "../../components/Calendar/SlotGrid";
+import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+import "./BookingPage.css";
 
 export default function BookingPage() {
   const { user } = useAuth();
@@ -11,7 +12,7 @@ export default function BookingPage() {
   const [resourceId, setResourceId] = useState(null);
   const [date, setDate] = useState(new Date());
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
     api.get("/resources").then((res) => {
@@ -21,11 +22,11 @@ export default function BookingPage() {
   }, []);
 
   useEffect(() => {
-    if (resourceId) refetchAvailability();
+    if (resourceId) refetchAvailability({silent: false});
   }, [resourceId, date]);
 
-  async function refetchAvailability() {
-    setLoading(true);
+  async function refetchAvailability({silent = true} = {}) {
+    if (!silent) setInitialLoading(true);
     try {
       const res = await api.get("/bookings/availability", {
         params: { resourceId, date: date.toISOString() },
@@ -33,9 +34,8 @@ export default function BookingPage() {
       setBookings(res.data);
     } catch (err) {
       toast.error("Failed to load availability");
-      console.error(err);
     } finally {
-      setLoading(false);
+      if (!silent) setInitialLoading(false);
     }
   }
 
@@ -87,25 +87,29 @@ export default function BookingPage() {
 
   return (
     <div className="booking-page">
-      <select
-        value={resourceId ?? ""}
-        onChange={(e) => setResourceId(e.target.value)}
-      >
-        {resources.map((r) => (
-          <option key={r._id} value={r._id}>
-            {r.name}
-          </option>
-        ))}
-      </select>
+      <h1>Book a slot</h1>
+      <div className="control-panel">
+        <label htmlFor="resource-select">Select Resource:</label>
+        <select
+          value={resourceId ?? ""}
+          onChange={(e) => setResourceId(e.target.value)}
+        >
+          {resources.map((r) => (
+            <option key={r._id} value={r._id}>
+              {r.name}
+            </option>
+          ))}
+        </select>
+        <label htmlFor="date-input">Select Date:</label>
+        <input
+          type="date"
+          value={date.toISOString().slice(0, 10)}
+          onChange={(e) => setDate(new Date(e.target.value))}
+        />
+      </div>
 
-      <input
-        type="date"
-        value={date.toISOString().slice(0, 10)}
-        onChange={(e) => setDate(new Date(e.target.value))}
-      />
-
-      {loading ? (
-        <p>Loading slots...</p>
+      {initialLoading ? (
+        <p className="loading-text">Loading slots...</p>
       ) : (
         <SlotGrid
           date={date}
