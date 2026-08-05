@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import '../../styles/Auth.css';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -29,33 +30,44 @@ export default function Register() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="auth-form">
-      <h2>Create an account</h2>
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Name"
-        required
-      />
-      <input
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        type="email"
-        placeholder="Email"
-        required
-      />
-      <input
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        type="password"
-        placeholder="Password"
-        required
-        minLength={6}
-      />
-      <button type="submit" disabled={submitting}>
-        {submitting ? 'Creating account...' : 'Register'}
-      </button>
-      <p>Already have an account? <Link to="/login">Log in</Link></p>
-    </form>
+    <div className="auth-page">
+      <div className="auth-panel">
+        <div className="auth-panel-header">
+          <span className="eyebrow">Coworking Booking</span>
+          <h1>Create account</h1>
+        </div>
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <div className="field">
+            <label>Name</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+          <div className="field">
+            <label>Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="field">
+            <label>Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+            />
+          </div>
+          <button className="auth-submit" type="submit" disabled={submitting}>
+            {submitting ? 'Creating account…' : 'Register'}
+          </button>
+          <p className="auth-switch">
+            Already have an account? <Link to="/login">Sign in</Link>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 }
