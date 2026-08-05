@@ -1,16 +1,50 @@
-# React + Vite
+# Coworking Space Booking System — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React frontend for the coworking booking system. Pairs with the [backend repo](https://github.com/zaid-shaikh17/booking-system-backend), which handles the actual concurrency-safe booking logic — see that README for the technical deep dive.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Auth (register/login) with protected routes
+- Custom slot-grid calendar (built from scratch, not a library) showing open / booked / yours per hour
+- Real-time-feeling booking flow: click an open slot, get an immediate confirmation or a graceful "slot just taken" conflict message
+- One-click waitlist join when a race is lost on a slot
+- Cancel booking directly from the grid
 
-## React Compiler
+## Why a Custom Slot Grid
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Off-the-shelf calendar libraries hide the exact moment a booking succeeds or fails. Building the grid from scratch made it possible to surface the backend's concurrency handling directly in the UI — losing a race to book a slot visibly prompts a waitlist option instead of silently failing.
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React (Vite)
+- React Router (protected layout pattern)
+- Axios
+- react-hot-toast
+
+## Folder Structure
+
+```
+src/
+├── context/       # AuthContext
+├── services/      # api.js — single axios instance, JWT interceptor
+├── components/
+│   └── Calendar/  # SlotGrid — the core UI piece
+├── pages/
+├── layouts/       # ProtectedLayout — redirects unauthenticated users
+```
+
+## Running Locally
+
+```
+npm install
+# .env: VITE_API_URL (defaults to http://localhost:4000/api)
+npm run dev
+```
+
+## Demo Flow
+
+1. Register / log in
+2. Select a resource and date
+3. Book an open slot — confirms instantly
+4. Open a second session as a different user, try the same slot — get prompted to join the waitlist
+5. Cancel the original booking — the waitlisted user is automatically promoted and emailed
