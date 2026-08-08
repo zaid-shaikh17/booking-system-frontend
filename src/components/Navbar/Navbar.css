@@ -1,0 +1,86 @@
+.navbar {
+  height: 56px;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.navbar-brand {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--panel);
+  letter-spacing: 0.01em;
+}
+
+.navbar-user {
+  position: relative;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--yours);
+  color: var(--panel);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.15s;
+}
+
+.avatar:hover {
+  filter: brightness(1.12);
+}
+
+.user-menu {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  width: 200px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+}
+
+.user-menu-info {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-menu-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.user-menu-email {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.user-menu-logout {
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--taken);
+}
+
+.user-menu-logout:hover {
+  background: var(--taken-bg);
+}
