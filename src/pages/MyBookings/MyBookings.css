@@ -1,0 +1,94 @@
+.my-bookings-page {
+  max-width: 720px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.my-bookings-page h1 {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--open);
+  font-weight: 600;
+  margin: 20px 0 10px;
+}
+
+.section-label.wait {
+  color: var(--wait);
+}
+
+.booking-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.booking-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--yours);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.booking-row.waitlisted {
+  border-left-color: var(--wait);
+}
+
+.booking-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.booking-resource {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.booking-datetime {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.cancel-link {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--taken);
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+.cancel-link:hover {
+  background: var(--taken-bg);
+}
+
+.waitlist-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--wait);
+  background: var(--wait-bg);
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.empty-state {
+  color: var(--ink-soft);
+  font-size: 14px;
+}

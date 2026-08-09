@@ -10,16 +10,36 @@
   z-index: 20;
 }
 
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
 .navbar-brand {
   font-family: var(--font-mono);
   font-size: 15px;
   font-weight: 600;
   color: var(--panel);
   letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.navbar-link {
+  color: #C7CCD4;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar-link:hover {
+  color: var(--panel);
 }
 
 .navbar-user {
   position: relative;
+  flex-shrink: 0;
 }
 
 .avatar {

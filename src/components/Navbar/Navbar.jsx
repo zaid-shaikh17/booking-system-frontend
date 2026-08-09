@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -29,7 +29,10 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <span className="navbar-brand">CoworkBook</span>
+      <div className="navbar-left">
+        <span className="navbar-brand">CoworkBook</span>
+        {user && <Link to="/my-bookings" className="navbar-link">My Bookings</Link>}
+      </div>
 
       {user && (
         <div className="navbar-user" ref={menuRef}>

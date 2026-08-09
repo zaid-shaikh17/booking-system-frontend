@@ -5,6 +5,7 @@ import ProtectedLayout from './layouts/ProtectedLayout';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import BookingPage from './pages/BookingPage/BookingPage';
+import MyBookings from './pages/MyBookings/MyBookings';
 
 export default function App() {
   return (
@@ -16,7 +17,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route element={<ProtectedLayout />}>
             <Route path="/" element={<BookingPage />} />
-            
+            <Route path="/my-bookings" element={<MyBookings />} />
           </Route>
         </Routes>
       </BrowserRouter>
