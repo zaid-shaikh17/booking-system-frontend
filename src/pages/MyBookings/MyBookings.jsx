@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import './MyBookings.css';
+import { useNavigate, Link } from 'react-router-dom';
 
 function formatDate(d) {
   return new Date(d).toLocaleDateString(undefined, {
@@ -17,6 +18,7 @@ export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [waitlist, setWaitlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -47,6 +49,8 @@ export default function MyBookings() {
   if (loading) return <p className="loading-text">Loading your bookings…</p>;
 
   return (
+    <>
+    <Link to='/' className='my-booking-link'>⬅︎ Back to Booking Page</Link>
     <div className="my-bookings-page">
       <h1>My bookings</h1>
 
@@ -63,7 +67,7 @@ export default function MyBookings() {
                 <div className="booking-info">
                   <span className="booking-resource">{b.resourceId?.name ?? 'Resource'}</span>
                   <span className="booking-datetime">
-                    {formatDate(b.startTime)} · {formatTime(b.startTime)}–{formatTime(b.endTime)}
+                    {formatDate(b.startTime)} · {formatTime(b.startTime)} – {formatTime(b.endTime)}
                   </span>
                 </div>
                 <button className="cancel-link" onClick={() => handleCancel(b._id)}>
@@ -84,7 +88,7 @@ export default function MyBookings() {
                 <div className="booking-info">
                   <span className="booking-resource">{w.resourceId?.name ?? 'Resource'}</span>
                   <span className="booking-datetime">
-                    {formatDate(w.startTime)} · {formatTime(w.startTime)}–{formatTime(w.endTime)}
+                    {formatDate(w.startTime)} · {formatTime(w.startTime)} – {formatTime(w.endTime)}
                   </span>
                 </div>
                 <span className="waitlist-tag">Waiting</span>
@@ -94,5 +98,6 @@ export default function MyBookings() {
         </section>
       )}
     </div>
+    </>
   );
 }

@@ -92,3 +92,13 @@
   color: var(--ink-soft);
   font-size: 14px;
 }
+
+.my-booking-link {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dark);
+  text-decoration: none;
+  font-family: var(--font-mono);
+}
