@@ -22,16 +22,19 @@ export default function SlotGrid({ date, bookings, currentUserId, onSelectSlot, 
   const prevStatuses = useRef({});
   const [changedKeys, setChangedKeys] = useState({});
 
-  function getSlotInfo(slot) {
-    const match = bookings.find(
-      (b) => new Date(b.startTime).getTime() === slot.start.getTime()
-    );
-    if (!match) return { status: 'open' };
-    if (String(match.userId) === String(currentUserId)) {
-      return { status: 'yours', bookingId: match._id };
-    }
-    return { status: 'booked' };
+function getSlotInfo(slot) {
+  const match = bookings.find(
+    (b) => new Date(b.startTime).getTime() === slot.start.getTime()
+  );
+  if (!match) {
+    if (slot.start < new Date()) return { status: 'past' };
+    return { status: 'open' };
   }
+  if (String(match.userId) === String(currentUserId)) {
+    return { status: 'yours', bookingId: match._id };
+  }
+  return { status: 'booked' };
+}
 
   useEffect(() => {
     const changed = {};
@@ -46,7 +49,6 @@ export default function SlotGrid({ date, bookings, currentUserId, onSelectSlot, 
     setChangedKeys(changed);
     const timeout = setTimeout(() => setChangedKeys({}), 450);
     return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookings]);
 
   return (

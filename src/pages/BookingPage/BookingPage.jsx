@@ -103,6 +103,7 @@ export default function BookingPage() {
         <label htmlFor="date-input">Select Date:</label>
         <input
           type="date"
+          min={new Date().toISOString().slice(0, 10)}
           value={date.toISOString().slice(0, 10)}
           onChange={(e) => setDate(new Date(e.target.value))}
         />
